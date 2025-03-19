@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <style>
+      body {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        border: 3px solid #2a4365;
+        padding: 20px;
+        background-color: white;
+      }
+
+      .header {
+        background-color: #2a4365;
+        color: #ffffff;
+        padding: 10px;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      .company-info {
+        display: flex;
+        margin-bottom: 20px;
+        border: 2px solid #2a4365;
+        padding: 10px;
+      }
+
+      .logo-container {
+        width: 100px;
+        height: 100px;
+        border: 2px solid #2a4365;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+      }
+
+      .logo-container img {
+        max-width: 90%;
+        max-height: 90%;
+      }
+
+      .company-details {
+        flex: 1;
+      }
+
+      .quotation-details {
+        flex: 2;
+        text-align: right;
+      }
+
+      .detail-row {
+        display: flex;
+        margin-bottom: 5px;
+      }
+
+      .detail-label {
+        font-weight: bold;
+        color: #2d3748;
+        width: 150px;
+      }
+
+      .section {
+        margin-bottom: 20px;
+        border: 2px solid #2a4365;
+      }
+
+      .section-header {
+        background-color: #2a4365;
+        color: #ffffff;
+        padding: 8px;
+        font-weight: bold;
+        font-size: 12px;
+      }
+
+      .section-content {
+        padding: 10px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        border: 2px solid #2a4365;
+      }
+
+      th {
+        background-color: #4c51bf;
+        color: #ffffff;
+        padding: 10px;
+        text-align: center;
+        font-weight: bold;
+        border: 1px solid #2a4365;
+      }
+
+      td {
+        padding: 10px;
+        border: 1px solid #2a4365;
+        text-align: center;
+      }
+
+      .totals-section {
+        background-color: #e2e8f0;
+        padding: 10px;
+        border: 2px solid #2a4365;
+      }
+
+      .total-row {
+        display: flex;
+        justify-content: flex-end;
+        margin: 5px 0;
+      }
+
+      .total-label {
+        font-weight: bold;
+        margin-right: 10px;
+      }
+
+      .signature-section {
+        text-align: right;
+        padding-top: 20px;
+        color: #2a4365;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">QUOTATION</div>
+
+      <div class="company-info">
+        <div class="logo-container">
+          <% if (quotation.logoUrl) { %>
+          <img src="<%= quotation.logoUrl %>" alt="Company Logo" />
+          <% } else { %> COMPANY LOGO <% } %>
+        </div>
+
+        <div class="company-details">
+          <div class="detail-row">
+            <div class="detail-label">COMPANY NAME</div>
+          </div>
+          <div class="detail-row">
+            <div>COMPANY ADDRESS LINE 1</div>
+          </div>
+          <div class="detail-row">
+            <div>COMPANY ADDRESS LINE 2</div>
+          </div>
+          <div class="detail-row">
+            <div>CITY, STATE, COUNTRY - POSTAL CODE</div>
+          </div>
+        </div>
+
+        <div class="quotation-details">
+          <div class="detail-row">
+            <div class="detail-label">QUOTATION NO:</div>
+            <div>QUT/<%= quotation.id %>/24-25</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">DATE:</div>
+            <div>
+              <%= quotation.date || new Date().toISOString().split('T')[0] %>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">CURRENCY:</div>
+            <div>
+              <%= quotation.Currency ? quotation.Currency.currency : 'N/A' %>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">CONVERSION RATE:</div>
+            <div>
+              <%= quotation.conversion_rate ||
+              quotation.Currency?.conversion_rate || 'N/A' %> INR
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">CONSIGNEE DETAILS:</div>
+        <div class="section-content">
+          <div class="detail-row">
+            <div class="detail-label">Name:</div>
+            <div>
+              <%= quotation.Consignee ? quotation.Consignee.name : 'N/A' %>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Address:</div>
+            <div>
+              <%= quotation.Consignee ? quotation.Consignee.address : 'N/A' %>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Country:</div>
+            <div>
+              <%= quotation.Country ? quotation.Country.country_name : 'N/A' %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">SHIPPING DETAILS:</div>
+        <div class="section-content">
+          <div class="detail-row">
+            <div class="detail-label">Port Destination:</div>
+            <div><%= quotation.Port ? quotation.Port.portName : 'N/A' %></div>
+          </div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>SR. NO.</th>
+            <th>DESCRIPTION</th>
+            <th>QUANTITY</th>
+            <th>UNIT</th>
+            <th>PRICE</th>
+            <th>NET WEIGHT</th>
+            <th>GROSS WEIGHT</th>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (quotation.QuotationProducts &&
+          quotation.QuotationProducts.length > 0) { %> <%
+          quotation.QuotationProducts.forEach((product, index) => { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td>
+              <%= product.Product ? product.Product.productName : 'N/A' %>
+            </td>
+            <td><%= product.quantity || 0 %></td>
+            <td><%= product.Unit ? product.Unit.orderUnit : 'N/A' %></td>
+            <td>
+              <%= product.price || 0 %> <%= quotation.Currency ?
+              quotation.Currency.currency : 'N/A' %>
+            </td>
+            <td><%= product.net_weight || 0 %></td>
+            <td><%= product.gross_weight || 0 %></td>
+            <td><%= product.total || 0 %></td>
+          </tr>
+          <% }) %> <% } else { %>
+          <tr>
+            <td colspan="8">No products found</td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+
+      <div class="totals-section">
+        <div class="total-row">
+          <div class="total-label">Total Net Weight:</div>
+          <div><%= quotation.totalNetWeight || 0 %></div>
+        </div>
+        <div class="total-row">
+          <div class="total-label">Total Gross Weight:</div>
+          <div><%= quotation.totalGrossWeight || 0 %></div>
+        </div>
+        <% let totalPackages = 0; %> <% if (quotation.QuotationProducts &&
+        quotation.QuotationProducts.length > 0) { %> <%
+        quotation.QuotationProducts.forEach(product => { %> <% totalPackages +=
+        parseInt(product.total_package || 0); %> <% }) %>
+        <div class="total-row">
+          <div class="total-label">Total Package:</div>
+          <div><%= totalPackages %></div>
+        </div>
+        <% } %> <% if (quotation.QuotationProducts &&
+        quotation.QuotationProducts.length > 0 &&
+        quotation.QuotationProducts[0].Package) { %>
+        <div class="total-row">
+          <div class="total-label">Package:</div>
+          <div>
+            <%= quotation.QuotationProducts[0].Package.netWeight %> (<%=
+            quotation.QuotationProducts[0].Package.grossWeight %>)
+          </div>
+        </div>
+        <% } %>
+        <div class="total-row">
+          <div class="total-label">Total (Native Currency):</div>
+          <div>
+            <%= quotation.total_native || 0 %> <%= quotation.Currency ?
+            quotation.Currency.currency : 'N/A' %>
+          </div>
+        </div>
+        <div class="total-row">
+          <div class="total-label">Total (INR):</div>
+          <div><%= quotation.total_inr || 0 %> INR</div>
+        </div>
+      </div>
+
+      <div class="signature-section">AUTHORISED SIGNATORY</div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,102 @@
+<div id="advancedDetailsSection" class="card" style="display: none">
+  <div class="card-header">
+    <h2 class="card-title h4 mb-0">Advanced Details</h2>
+  </div>
+  <div class="card-body">
+    <div class="advance">
+      <!-- Product Tag & Unit -->
+      <div class="row g-3 details div4">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="productTag" class="form-label">Product Tag</label>
+            <input
+              type="text"
+              id="productTag"
+              name="productTag"
+              class="form-control"
+              placeholder="chill, powder"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="unit" class="form-label">Unit</label>
+            <select name="unit" id="unit" class="form-select">
+              <option value="MT">MT</option>
+              <option value="LT">LT</option>
+              <option value="TON">TON</option>
+              <option value="Pieces">Pieces</option>
+              <option value="KG">KG</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Net Weight & Gross Weight -->
+      <div class="row g-3 details div5">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="netWeight" class="form-label">Net Weight (KG)</label>
+            <input
+              type="number"
+              name="netWeight"
+              id="netWeight"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="grossWeight" class="form-label"
+              >Gross Weight (KG)</label
+            >
+            <input
+              type="number"
+              name="grossWeight"
+              id="grossWeight"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Dimension & Sell Price -->
+      <div class="row g-3 details div6">
+        <div class="col-md-6">
+          <label for="dimension" class="form-label">Dimension (M³)</label>
+          <div id="dimension" class="input-group mb-3">
+            <input
+              type="number"
+              name="dimensionLength"
+              class="form-control"
+              placeholder="Length"
+            />
+            <input
+              type="number"
+              name="dimensionWidth"
+              class="form-control"
+              placeholder="Width"
+            />
+            <input
+              type="number"
+              name="dimensionHeight"
+              class="form-control"
+              placeholder="Height"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="sellPrice" class="form-label">Sell Price</label>
+            <input
+              type="number"
+              id="sellPrice"
+              name="sellPrice"
+              class="form-control"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

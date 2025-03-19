@@ -1,0 +1,23 @@
+/* unitForm.css */
+#unitFormContainer {
+  width: 400px;
+  transition: right 0.3s ease-in-out;
+  right: -400px; /* Start off-screen */
+  z-index: 1000;
+}
+
+#unitFormContainer.active {
+  right: 0; /* Slide in */
+}
+
+@media (max-width: 768px) {
+  #unitFormContainer {
+    width: 100%;
+    right: -100%;
+  }
+}
+
+/* Optional: Adjust form elements if needed */
+.button-container {
+  margin-top: 1rem;
+}

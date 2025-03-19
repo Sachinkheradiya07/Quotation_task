@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unit Management</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <style>
+      .unit-list table {
+        width: 100%;
+      }
+      .action-buttons {
+        display: flex;
+        gap: 5px;
+      }
+      #unitFormContainer {
+        transition: all 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-4">
+      <div class="unit-list">
+        <h2 class="mb-3">Units List</h2>
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead class="table-dark">
+              <tr>
+                <th>Order Unit</th>
+                <th>Packing Unit</th>
+                <th>Weight</th>
+                <th>Note</th>
+                <th>Created At</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% units.forEach(unit => { %>
+              <tr>
+                <td><%= unit.orderUnit %></td>
+                <td><%= unit.packingUnit %></td>
+                <td><%= unit.weight %></td>
+                <td><%= unit.noteForMe || 'N/A' %></td>
+                <td><%= new Date(unit.createdAt).toLocaleString() %></td>
+                <td>
+                  <div class="action-buttons">
+                    <button
+                      class="btn btn-primary btn-sm"
+                      onclick="editUnit('<%= unit.id %>', '<%= unit.orderUnit %>', '<%= unit.packingUnit %>', '<%= unit.weight %>', `<%= unit.noteForMe || '' %>`)"
+                    >
+                      ✏️ Edit
+                    </button>
+                    <button
+                      class="btn btn-danger btn-sm delete-btn"
+                      onclick="deleteUnit('<%= unit.id %>')"
+                    >
+                      🗑️ Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <button id="showFormBtn" class="btn btn-success mb-3">
+        Create New Unit
+      </button>
+
+      <div
+        id="unitFormContainer"
+        class="card position-fixed end-0 top-0 mt-4 me-4"
+        style="width: 400px; display: none"
+      >
+        <form id="unitForm" method="POST" class="card-body">
+          <h2 id="formTitle" class="card-title">Create New Unit</h2>
+          <input type="hidden" id="unitId" name="unitId" />
+
+          <div class="mb-3">
+            <label for="orderUnit" class="form-label">Order Unit</label>
+            <select
+              id="orderUnit"
+              name="orderUnit"
+              class="form-select"
+              required
+            >
+              <option value="MT">MT</option>
+              <option value="TON">TON</option>
+              <option value="KG">KG</option>
+              <option value="PIECE">PIECE</option>
+              <option value="LTR">LTR</option>
+              <option value="BAGS">BAGS</option>
+              <option value="PCS">PSC</option>
+              <option value="BOX">BOX</option>
+              <option value="CAN">CAN</option>
+              <option value="JAR">JAR</option>
+              <option value="BOTTLES">BOTTELS</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="packingUnit" class="form-label">Packing Unit</label>
+            <select
+              id="packingUnit"
+              name="packingUnit"
+              class="form-select"
+              required
+            >
+              <option value="MT">MT</option>
+              <option value="TON">TON</option>
+              <option value="KG">KG</option>
+              <option value="PIECE">PIECE</option>
+              <option value="LTR">LTR</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="weight" class="form-label">Weight</label>
+            <input
+              type="number"
+              id="weight"
+              name="weight"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="noteForMe" class="form-label">Note</label>
+            <textarea
+              id="noteForMe"
+              name="noteForMe"
+              class="form-control"
+            ></textarea>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" id="saveButton" class="btn btn-primary">
+              Save
+            </button>
+            <button type="button" id="closeFormBtn" class="btn btn-secondary">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS and your custom script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const unitForm = document.getElementById("unitForm");
+        const formTitle = document.getElementById("formTitle");
+        const unitIdInput = document.getElementById("unitId");
+        const saveButton = document.getElementById("saveButton");
+        const unitFormContainer = document.getElementById("unitFormContainer");
+        const showFormBtn = document.getElementById("showFormBtn");
+        const closeFormBtn = document.getElementById("closeFormBtn");
+
+        // Show form
+        showFormBtn.addEventListener("click", () => {
+          unitFormContainer.style.display = "block";
+          setTimeout(() => unitFormContainer.classList.add("active"), 10);
+        });
+
+        // Close form
+        closeFormBtn.addEventListener("click", () => {
+          unitFormContainer.classList.remove("active");
+          setTimeout(() => {
+            unitFormContainer.style.display = "none";
+            unitForm.reset();
+            isEditing = false;
+            saveButton.innerText = "Save";
+            formTitle.innerText = "Create New Unit";
+            unitForm.setAttribute("data-method", "POST");
+          }, 300);
+        });
+
+        let isEditing = false;
+
+        // Edit unit function
+        window.editUnit = (id, orderUnit, packingUnit, weight, note) => {
+          console.log("Edit button clicked!", {
+            id,
+            orderUnit,
+            packingUnit,
+            weight,
+            note,
+          });
+
+          if (!formTitle || !unitIdInput || !unitFormContainer) {
+            console.error("Form elements not found!");
+            return;
+          }
+
+          formTitle.innerText = "Edit Unit";
+          unitIdInput.value = id;
+          document.getElementById("orderUnit").value = orderUnit;
+          document.getElementById("packingUnit").value = packingUnit;
+          document.getElementById("weight").value = weight;
+          document.getElementById("noteForMe").value = note || "";
+
+          isEditing = true;
+          saveButton.innerText = "Update";
+          unitForm.setAttribute("data-method", "PUT");
+
+          unitFormContainer.style.display = "block";
+          setTimeout(() => unitFormContainer.classList.add("active"), 10);
+        };
+
+        // Delete unit function
+        window.deleteUnit = (id) => {
+          if (confirm("Are you sure you want to delete this unit?")) {
+            fetch("/unit/delete/" + id, { method: "DELETE" })
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.success) {
+                  location.reload();
+                } else {
+                  alert("Error deleting unit");
+                }
+              });
+          }
+        };
+
+        // Handle form submission
+        unitForm.addEventListener("submit", async function (event) {
+          event.preventDefault();
+          const formData = new FormData(unitForm);
+          const unitId = unitIdInput.value;
+          const isUpdate = unitForm.getAttribute("data-method") === "PUT";
+
+          const url = isUpdate ? `/unit/update/${unitId}` : "/unit/create";
+          const method = isUpdate ? "PUT" : "POST";
+
+          try {
+            const response = await fetch(url, {
+              method: method,
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                orderUnit: formData.get("orderUnit"),
+                packingUnit: formData.get("packingUnit"),
+                weight: formData.get("weight"),
+                noteForMe: formData.get("noteForMe"),
+              }),
+            });
+
+            const contentType = response.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+              throw new Error("Invalid server response (not JSON)");
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+              location.reload();
+            } else {
+              alert(data.message || "Failed to save unit.");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            alert("Failed to save unit. Check console for details.");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

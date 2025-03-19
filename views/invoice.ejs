@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quotation Template</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Roboto", "Arial", sans-serif;
+      }
+
+      body {
+        padding: 10px;
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: #f5f7fa;
+        line-height: 1.2;
+        font-size: 12px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #2a4365;
+        background-color: #ffffff;
+        page-break-inside: avoid;
+      }
+
+      th,
+      td {
+        border: 1px solid #2a4365;
+        padding: 5px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .header {
+        text-align: center;
+        font-weight: bold;
+        font-size: 20px;
+        padding: 10px;
+        background-color: #2a4365;
+        color: #ffffff;
+      }
+
+      .label {
+        font-weight: bold;
+        color: #2d3748;
+      }
+
+      .right-align {
+        text-align: right;
+      }
+
+      .center-align {
+        text-align: center;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+      }
+
+      .logo-img {
+        width: 80px;
+        height: auto;
+        border-radius: 4px;
+      }
+
+      .company-details {
+        padding-left: 10px;
+        color: #4a5568;
+        font-size: 10px;
+      }
+
+      .goods-table th {
+        font-weight: bold;
+        text-align: center;
+        background-color: #4c51bf;
+        color: #ffffff;
+        padding: 5px;
+      }
+
+      .goods-table td {
+        text-align: center;
+        color: #2d3748;
+      }
+
+      .totals td {
+        text-align: right;
+        font-weight: bold;
+        background-color: #e2e8f0;
+        padding: 5px;
+        border-top: 1px solid #2a4365;
+      }
+
+      .signature {
+        text-align: right;
+        padding-top: 10px;
+        font-weight: bold;
+        color: #2a4365;
+        font-size: 12px;
+      }
+
+      @media print {
+        body {
+          padding: 5px;
+          font-size: 10px;
+        }
+        .header {
+          font-size: 18px;
+          padding: 8px;
+        }
+        .logo-img {
+          width: 60px;
+        }
+        th,
+        td {
+          padding: 3px;
+        }
+        .company-details {
+          font-size: 8px;
+        }
+        .signature {
+          padding-top: 5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td colspan="3" class="header">QUOTATION</td>
+      </tr>
+      <tr>
+        <td>
+          <div class="logo-container">
+            <img
+              src="https://media.licdn.com/dms/image/v2/D4D0BAQEm4QGaHZA4hQ/company-logo_200_200/company-logo_200_200/0/1688553934763?e=2147483647&v=beta&t=bxqI2sCeLkRg6KlqzDp-EGhx8lMSuWIrR92f7F7Xql4"
+              alt="Company Logo"
+              class="logo-img"
+            />
+            <div class="company-details">
+              <strong>COMPANY NAME</strong><br />
+              COMPANY ADDRESS LINE 1<br />
+              COMPANY ADDRESS LINE 2<br />
+              CITY, STATE, COUNTRY -<br />
+              POSTAL CODE
+            </div>
+          </div>
+        </td>
+        <td colspan="2">
+          <table style="border: none; height: 100%">
+            <tr>
+              <td
+                style="border-top: none; border-right: none; border-left: none"
+              >
+                <div class="label">QUOTATION NO.</div>
+                <div>QUT/<%= quotation.id %>/24-25</div>
+              </td>
+              <td
+                style="border-top: none; border-right: none; border-left: none"
+                class="right-align"
+              >
+                <div class="label">DATE</div>
+                <div><%= quotation.date %></div>
+              </td>
+            </tr>
+            <tr>
+              <td
+                style="border-top: none; border-right: none; border-left: none"
+              >
+                <div class="label">CURRENCY</div>
+                <div>
+                  <%= quotation.Currency ? quotation.Currency.currency : "N/A"
+                  %>
+                </div>
+              </td>
+              <td
+                style="border-top: none; border-right: none; border-left: none"
+                class="right-align"
+              >
+                <div class="label">CONVERSION RATE</div>
+                <div><%= quotation.conversion_rate %> INR</div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <div class="label">CONSIGNEE DETAILS:</div>
+          <table style="border: none; width: 100%">
+            <tr>
+              <td style="border: none; width: 20%">Name:</td>
+              <td style="border: none">
+                <%= quotation.Consignee ? quotation.Consignee.name : "N/A" %>
+              </td>
+            </tr>
+            <tr>
+              <td style="border: none">Address:</td>
+              <td style="border: none">
+                <%= quotation.Consignee ? quotation.Consignee.address : "N/A" %>
+              </td>
+            </tr>
+            <tr>
+              <td style="border: none">Country:</td>
+              <td style="border: none">
+                <%= quotation.Country ? quotation.Country.country_name : "N/A"
+                %>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <div class="label">SHIPPING DETAILS:</div>
+          <table style="border: none; width: 100%">
+            <tr>
+              <td style="border: none; width: 20%">Port Destination:</td>
+              <td style="border: none">
+                <%= quotation.Port ? quotation.Port.portName : "N/A" %>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3" style="padding: 0">
+          <table class="goods-table" style="border: none">
+            <tr>
+              <th>SR. NO.</th>
+              <th>DESCRIPTION</th>
+              <th>QUANTITY</th>
+              <th>UNIT</th>
+              <th>PRICE (INR)</th>
+              <th>NET WEIGHT</th>
+              <th>GROSS WEIGHT</th>
+              <th>TOTAL (INR)</th>
+              <th>GST (%)</th>
+              <th>GST AMOUNT (INR)</th>
+            </tr>
+            <% let subtotal_inr = 0; let gst_amount_inr = 0; let
+            total_with_gst_inr = 0; const extraCharge = 1235; let
+            totalAmountBeforeExtra = 0; if (quotation.QuotationProducts &&
+            quotation.QuotationProducts.length > 0) { totalAmountBeforeExtra =
+            quotation.QuotationProducts.reduce((sum, product) => { return sum +
+            (product.price * product.quantity * quotation.conversion_rate); },
+            0); } %> <% if (quotation.QuotationProducts &&
+            quotation.QuotationProducts.length > 0) { %> <%
+            quotation.QuotationProducts.forEach((product, index) => { %> <%
+            const originalTotal = product.price * product.quantity *
+            quotation.conversion_rate; const productWeight =
+            totalAmountBeforeExtra > 0 ? originalTotal / totalAmountBeforeExtra
+            : 0; const productExtraCharge = extraCharge * productWeight; const
+            perUnitExtraCharge = product.quantity > 0 ? productExtraCharge /
+            product.quantity : 0; const newPrice = (product.price *
+            quotation.conversion_rate) + perUnitExtraCharge; const newTotal =
+            newPrice * product.quantity; const gstRate = product.Product.gst ||
+            0; const gstAmount = newTotal * (gstRate / 100); subtotal_inr +=
+            newTotal; gst_amount_inr += gstAmount; %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td>
+                <%= product.Product ? product.Product.productName : "N/A" %>
+              </td>
+              <td><%= product.quantity %></td>
+              <td><%= product.Unit ? product.Unit.orderUnit : "N/A" %></td>
+              <td><%= newPrice.toFixed(2) %> INR</td>
+              <td><%= product.net_weight %></td>
+              <td><%= product.gross_weight %></td>
+              <td><%= newTotal.toFixed(2) %> INR</td>
+              <td><%= gstRate %></td>
+              <td><%= gstAmount.toFixed(2) %> INR</td>
+            </tr>
+            <% }); %> <% total_with_gst_inr = subtotal_inr + gst_amount_inr; %>
+            <% } else { %>
+            <tr>
+              <td colspan="10" class="center-align">No products found</td>
+            </tr>
+            <% } %>
+            <tr class="totals">
+              <td colspan="5"></td>
+              <td>Total Net Weight: <%= quotation.totalNetWeight %></td>
+              <td>Total Gross Weight: <%= quotation.totalGrossWeight %></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="totals">
+              <td colspan="7" class="right-align">Total Package:</td>
+              <td>
+                <%= quotation.QuotationProducts &&
+                quotation.QuotationProducts.length > 0 ?
+                quotation.QuotationProducts.reduce((sum, p) => sum +
+                p.total_package, 0) : 0 %>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="totals">
+              <td colspan="7" class="right-align">Package:</td>
+              <td>
+                <%= quotation.QuotationProducts &&
+                quotation.QuotationProducts[0] &&
+                quotation.QuotationProducts[0].Package ?
+                `${quotation.QuotationProducts[0].Package.netWeight}
+                (${quotation.QuotationProducts[0].Package.grossWeight})` :
+                "N/A"%>
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="totals">
+              <td colspan="7" class="right-align">Subtotal (INR):</td>
+              <td><%= subtotal_inr.toFixed(2) %> INR</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="totals">
+              <td colspan="7" class="right-align">Total GST Amount (INR):</td>
+              <td><%= gst_amount_inr.toFixed(2) %> INR</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="totals">
+              <td colspan="7" class="right-align">Total Extra Charge (INR):</td>
+              <td><%= extraCharge.toFixed(2) %> INR</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="totals">
+              <td colspan="7" class="right-align">Total with GST (INR):</td>
+              <td><%= total_with_gst_inr.toFixed(2) %> INR</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr class="totals">
+              <td colspan="7" class="right-align">Average Price per Unit:</td>
+              <td>
+                <% let totalQuantity = quotation.QuotationProducts.reduce((sum,
+                p) => sum + Number(p.quantity), 0); let avgPricePerUnit =
+                totalQuantity > 0 ? (subtotal_inr / totalQuantity).toFixed(2) :
+                0; %> <%= avgPricePerUnit %> INR
+              </td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <div class="signature">AUTHORISED SIGNATORY</div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

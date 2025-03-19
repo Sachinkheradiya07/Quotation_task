@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quotation Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Quotation Summary (Last 30 Days)</h2>
+      <h3>Total Amount: <span id="totalAmount"></span> INR</h3>
+      <canvas id="quotationChart"></canvas>
+    </div>
+
+    <script>
+      // Parse server-side data from EJS safely
+      const quotations = <%- JSON.stringify(quotations) %>;
+
+      // Function to get last 30 days as DD/MM/YYYY
+      function getLast30Days() {
+          let dates = [];
+          let today = new Date();
+          for (let i = 29; i >= 0; i--) {
+              let d = new Date();
+              d.setDate(today.getDate() - i);
+              dates.push(d.toLocaleDateString("en-GB")); // Format: DD/MM/YYYY
+          }
+          return dates;
+      }
+
+      // Prepare data for chart
+      const last30Days = getLast30Days();
+      const quotationMap = {}; // Store quotation amounts by date
+      let totalAmount = 0; // Store total amount
+
+      // Fill the quotationMap with existing data
+      quotations.forEach(q => {
+          let date = new Date(q.date).toLocaleDateString("en-GB");
+          quotationMap[date] = (quotationMap[date] || 0) + q.totalAmount;
+          totalAmount += q.totalAmount; // Add to total amount
+      });
+
+      // Ensure all 30 days exist in the data, filling missing days with 0
+      const data = last30Days.map(date => quotationMap[date] || 0);
+
+      // Display total amount
+      document.getElementById("totalAmount").textContent = totalAmount.toLocaleString();
+
+      // Create Bar Chart
+      const ctx = document.getElementById('quotationChart').getContext('2d');
+      new Chart(ctx, {
+          type: 'bar',
+          data: {
+              labels: last30Days,
+              datasets: [{
+                  label: 'Total Quotation Amount (INR)',
+                  data: data,
+                  backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              responsive: true,
+              scales: {
+                  x: {
+                      title: {
+                          display: true,
+                          text: 'Date (Last 30 Days)',
+                          font: { weight: 'bold' }
+                      }
+                  },
+                  y: {
+                      title: {
+                          display: true,
+                          text: 'Total Quotation Amount (INR)',
+                          font: { weight: 'bold' }
+                      },
+                      beginAtZero: true
+                  }
+              }
+          }
+      });
+    </script>
+  </body>
+</html>

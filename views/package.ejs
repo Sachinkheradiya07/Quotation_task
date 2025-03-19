@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Packages</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/package.css" />
+  </head>
+
+  <body>
+    <div class="container mt-4">
+      <button id="showFormBtn" class="btn btn-primary mb-3">
+        Create New Package
+      </button>
+
+      <!-- Slide-in Form -->
+      <div id="formContainer" class="card shadow-sm p-4" style="display: none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 id="formTitle" class="mb-0">Create New Package</h2>
+          <button class="btn-close" id="closeFormBtn"></button>
+        </div>
+        <form id="packageForm" method="POST">
+          <div class="mb-3">
+            <label for="unit" class="form-label">Select Unit:</label>
+            <select id="unit" name="unitId" class="form-select" required>
+              <option value="">-- Select Unit --</option>
+              <% units.forEach(unit => { %>
+              <option value="<%= unit.id %>">
+                <%= unit.orderUnit %> (<%= unit.packingUnit %>)
+              </option>
+              <% }); %>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="netWeight" class="form-label">Net Weight:</label>
+            <input
+              type="number"
+              step="0.01"
+              id="netWeight"
+              name="netWeight"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="grossWeight" class="form-label">Gross Weight:</label>
+            <input
+              type="number"
+              step="0.01"
+              id="grossWeight"
+              name="grossWeight"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <button type="submit" class="btn btn-success">Save Package</button>
+        </form>
+      </div>
+
+      <!-- Package List -->
+      <h2 class="mt-4">Package List</h2>
+      <div class="table-responsive">
+        <table id="packageTable" class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Order Unit</th>
+              <th>Packing Unit</th>
+              <th>Net Weight</th>
+              <th>Gross Weight</th>
+              <th>Created At</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (packages.length > 0) { %> <% packages.forEach(pkg => { %>
+            <tr data-id="<%= pkg.id %>">
+              <td><%= pkg.Unit.orderUnit %></td>
+              <td><%= pkg.Unit.packingUnit %></td>
+              <td><%= pkg.netWeight %></td>
+              <td><%= pkg.grossWeight %></td>
+              <td><%= new Date(pkg.createdAt).toLocaleString() %></td>
+              <td>
+                <button
+                  class="btn btn-sm btn-warning edit-btn"
+                  onclick="editPackage('<%= pkg.id %>', '<%= pkg.netWeight %>', '<%= pkg.grossWeight %>', '<%= pkg.Unit ? pkg.Unit.id : '' %>')"
+                >
+                  Edit
+                </button>
+                <button
+                  class="btn btn-sm btn-danger delete-btn"
+                  onclick="deletePackage('<%= pkg.id %>', this)"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+            <% }); %> <% } else { %>
+            <tr id="noData">
+              <td colspan="6" class="text-center">No packages found</td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS and your custom script -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/JS/packageScript.js"></script>
+  </body>
+</html>
