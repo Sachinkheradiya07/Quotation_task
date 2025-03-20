@@ -290,7 +290,7 @@ export const quotationCreate = async (req, res) => {
     console.log("New Quotation:", newQuotation);
 
     if (products && Array.isArray(products) && products.length > 0) {
-      const quotationProducts = products.map((product) => {
+      const quotationProducts = products.map((product,index) => {
         let { product_id, variant_id } = splitProductId(product.product_id);
 
         product_id = parseInt(product_id, 10);
